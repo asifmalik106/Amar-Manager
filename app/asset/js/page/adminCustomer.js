@@ -1,4 +1,4 @@
-var baseURL = 'http://50.116.58.130:200/';
+var baseURL = 'https://app.amar-manager.com/';
 //Add Customer Function
 $('#customerList').dataTable({
 "order": [[ 0, "desc" ]],
@@ -6,19 +6,24 @@ $('#customerList').dataTable({
 	});
 function addCustomer()
 {
-	$("#customerStatusLoading").show();
+	
 	var newCustomerName = $('#newCustomerName').val();
 	var newCustomerFather = $('#newCustomerFather').val();
 	var newCustomerPhone = $('#newCustomerPhone').val();
 	var newCustomerAddress = $('#newCustomerAddress').val();
 	var newCustomerLimit = $('#newCustomerLimit').val();
-	 $.post(baseURL+'admin/customer/add/',
+  var newCustomerDue = $('#newCustomerDue').val();
+  var newCustomerDue2 = $('#newCustomerDue2').val();
+  if(newCustomerDue==newCustomerDue2){
+    $("#customerStatusLoading").show();
+     	 $.post(baseURL+'admin/customer/add/',
 	    {
 	        newCName: newCustomerName,
 	        newCFather: newCustomerFather,
 	        newCPhone: newCustomerPhone,
 	        newCAddress: newCustomerAddress,
 	        newCLimit: newCustomerLimit,
+          newCDue: newCustomerDue,
 	        submit: "true"
 	    },
 	    function(data, status){
@@ -33,6 +38,8 @@ function addCustomer()
 				$('#newCustomerPhone').val('');
 				$('#newCustomerAddress').val('');
 				$('#newCustomerLimit').val('');
+        $('#newCustomerDue').val('');
+        $('#newCustomerDue2').val('');
 	        }
 	        else if(data=="duplicate"){
 	        	$("#customerStatusDuplicate").fadeIn();
@@ -53,4 +60,8 @@ function addCustomer()
 	        	}, 8000);
 	        }
 	    });
+  }else{
+    alert("Previous Due Not Matched, Please Verify The Previous Due");   
+  }
+
 }

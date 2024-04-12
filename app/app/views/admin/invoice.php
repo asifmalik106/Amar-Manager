@@ -2,6 +2,7 @@
         <?php include 'asset/includes/sidebar.php';?>
         <div id="page-wrapper">
             <div class="row">
+                <?php include 'system/notification.php'; ?>
                 <?php
                     $price = '';
                     if($data['data']['info']['invoiceType'] == 'sale'){
@@ -102,7 +103,7 @@
                         <td class="invoice-amount">  
                             <?php 
                                 $grandTotal = $data['data']['info']['invoiceAmount'] - $data['data']['info']['invoiceDiscount'];
-                                echo number_format($grandTotal, 2,'.',''); 
+                                echo $_SESSION['data']['businessCurrency']." ".number_format($grandTotal, 2,'.',''); 
                             ?> 
                         </td>
                     </tr>
@@ -111,7 +112,7 @@
                         <td class="invoice-amount">  
                             <?php 
                                 $payment = $data['data']['paid']->fetch_assoc();
-                                echo $_SESSION['data']['businessCurrency']." ".$payment['paid'];
+                                echo $_SESSION['data']['businessCurrency']." ".number_format($payment['paid'], 2,'.','');
                                 $due = 0.0; $adv = 0.0;
                                 if($grandTotal>$payment['paid']){
                                     $due = $grandTotal - $payment['paid'];
@@ -123,11 +124,11 @@
                     </tr>
                     <tr>
                         <td> <strong>Due: </strong> </td>
-                        <td class="invoice-amount">  <?php echo $_SESSION['data']['businessCurrency']." ".$due; ?></td>
+                        <td class="invoice-amount">  <?php echo $_SESSION['data']['businessCurrency']." ".number_format($due, 2,'.',''); ?></td>
                     </tr>
                     <tr>
                         <td> <strong>Advance: </strong> </td>
-                        <td class="invoice-amount">   <?php echo $_SESSION['data']['businessCurrency']." ".$adv; ?></td>
+                        <td class="invoice-amount">   <?php echo $_SESSION['data']['businessCurrency']." ".number_format($adv, 2,'.',''); ?></td>
                     </tr>
 
                 </table>

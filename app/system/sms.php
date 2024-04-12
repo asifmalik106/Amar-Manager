@@ -13,9 +13,9 @@ class SMS{
         $scID = $invoiceInfo['scID'];
         $date = date("d/m/Y", strtotime($invoiceInfo['invoiceDate']));
         $time  = date("g:iA", strtotime($invoiceInfo['invoiceTime']));
-        $total  = $invoiceInfo['invoiceAmount'] - $invoiceInfo['invoiceDiscount'];
-        $paid = $smsModel->getInvoicePaidAmount($data)->fetch_assoc()['paid'];
-        $due = $total - $paid;
+        $total  = sprintf("%.2f",  ($invoiceInfo['invoiceAmount'] - $invoiceInfo['invoiceDiscount']));
+        $paid = sprintf("%.2f",  $smsModel->getInvoicePaidAmount($data)->fetch_assoc()['paid']);
+        $due = sprintf("%.2f",  $total - $paid);
         $smsText = $smsModel->getSMSText($smsID)->fetch_assoc()['smsTemplate'];
         $smsText = str_replace("#SHOPNAME#", $shopName, $smsText);
         $smsText = str_replace("#INV_NO#", $data , $smsText);

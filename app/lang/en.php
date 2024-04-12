@@ -273,7 +273,8 @@ $sidebar = array(
   'sms' => 'SMS',
   'settings' => 'Settings',
   'logout' => 'Log Out',
-  'license' => 'Licensed to-'
+  'license' => 'Licensed to-',
+  'stock' => 'Stock'
 );
 
 $adminSettings = array(

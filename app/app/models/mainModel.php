@@ -31,4 +31,16 @@ class mainModel extends Model
     public function setSecondaryDB(){
         return $this->db->selectDB($_SESSION['data']['businessDBName']);
     }
+    public function setActivity($name, $page){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+    date_default_timezone_set($_SESSION['data']['businessTimeZone']);
+		$date = date('Y-m-d');
+		$time = date('H:i:s');
+    $dateTime = $date." ".$time;
+		$sql = "INSERT INTO activity_log ( `name`, `dateTime`, `page`) VALUES ( '$name', '$dateTime', '$page')";
+     
+    return $this->db->fetch($sql);
+  }
+
+  
 }

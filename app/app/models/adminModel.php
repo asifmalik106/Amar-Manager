@@ -23,7 +23,7 @@ class adminModel extends Model
 	public function getStockOver()
 	{
 		$this->db->selectDB($_SESSION['data']['businessDBName']);
-		$sql = "SELECT count(*) as over FROM stock where stock.quantity=0";
+		$sql = "SELECT count(*) as overf FROM stock where stock.quantity=0";
 		return $this->db->fetch($sql);
 	}
 	
@@ -240,7 +240,9 @@ class adminModel extends Model
 
 	public function addSupplier($newSupplierName, $newSupplierFather, $newSupplierPhone, $newSupplierAddress, $newSupplierLimit){
 		$this->db->selectDB($_SESSION['data']['businessDBName']);
-		$sql = "INSERT INTO supplierCustomer (scNameCompany, scFatherContactPerson, scContactNo, scAddress, scLimit, scType) VALUES ('$newSupplierName', '$newSupplierFather', '$newSupplierPhone', '$newSupplierAddress', '$newSupplierLimit', 'supplier')";
+		date_default_timezone_set($_SESSION['data']['businessTimeZone']);
+		$date = date('Y-m-d');
+		$sql = "INSERT INTO supplierCustomer (scNameCompany, scFatherContactPerson, scContactNo, scAddress, scLimit, scType, scDate) VALUES ('$newSupplierName', '$newSupplierFather', '$newSupplierPhone', '$newSupplierAddress', '$newSupplierLimit', 'supplier', '$date')";
 		return $this->db->execute($sql);
 	}
 	
@@ -305,6 +307,15 @@ class adminModel extends Model
 		$uID = $_SESSION['data']['userID'];
 		date_default_timezone_set($_SESSION['data']['businessTimeZone']);
 		$date = date('Y-m-d');
+		$time = date('H:i:s');
+		$sql = "INSERT INTO transaction (userID, trxDate, trxTime, trxType, trxReference, trxAmount, trxInfo) VALUES ( '$uID', '$date', '$time', 'cash', '$cashAccount', '$cashAmount', '$cashNote')";
+		return $this->db->execute($sql);
+	}
+  
+  public function addCashWithDate($cashAccount, $date, $cashAmount, $cashNote){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+		$uID = $_SESSION['data']['userID'];
+		date_default_timezone_set($_SESSION['data']['businessTimeZone']);
 		$time = date('H:i:s');
 		$sql = "INSERT INTO transaction (userID, trxDate, trxTime, trxType, trxReference, trxAmount, trxInfo) VALUES ( '$uID', '$date', '$time', 'cash', '$cashAccount', '$cashAmount', '$cashNote')";
 		return $this->db->execute($sql);
@@ -393,8 +404,20 @@ class adminModel extends Model
 		$date = date('Y-m-d');
 		$time = date('H:i:s');
 		$sql = "INSERT INTO invoiceInfo (userID, scID, invoiceAmount, invoiceDiscount, invoiceDate, invoiceTime, invoiceStatus, invoiceType, invoiceNote) VALUES ( '$uID', '$scID', '$amount', '$discount', '$date', '$time', '$status', '$type', '$note')";
+
 		return $this->db->execute($sql);
 	}
+  
+  public function addInvoiceInfoWithDate($scID, $date, $amount, $discount, $status, $type, $note){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+		$uID = $_SESSION['data']['userID'];
+		date_default_timezone_set($_SESSION['data']['businessTimeZone']);
+		$time = date('H:i:s');
+		$sql = "INSERT INTO invoiceInfo (userID, scID, invoiceAmount, invoiceDiscount, invoiceDate, invoiceTime, invoiceStatus, invoiceType, invoiceNote) VALUES ( '$uID', '$scID', '$amount', '$discount', '$date', '$time', '$status', '$type', '$note')";
+
+		return $this->db->execute($sql);
+	}
+  
 
 	public function addInvoiceTrx($invoiceID, $amount, $scID)
 	{
@@ -406,11 +429,28 @@ class adminModel extends Model
 		$sql = "INSERT INTO transaction (userID, trxDate, trxTime, trxType, trxReference, trxAmount, scID) VALUES ( '$uID', '$date', '$time', 'invoice', '$invoiceID', '$amount', '$scID')";
 		return $this->db->execute($sql);
 	}
+  
+  public function addInvoiceTrxWithDate($invoiceID, $date, $amount, $scID)
+	{
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+		$uID = $_SESSION['data']['userID'];
+		date_default_timezone_set($_SESSION['data']['businessTimeZone']);
+		$time = date('H:i:s');
+		$sql = "INSERT INTO transaction (userID, trxDate, trxTime, trxType, trxReference, trxAmount, scID) VALUES ( '$uID', '$date', '$time', 'invoice', '$invoiceID', '$amount', '$scID')";
+		return $this->db->execute($sql);
+	}
 
 	public function getLastInvoiceID($userID, $scID, $invoiceAmount,$invoiceStatus)
 	{
 		$this->db->selectDB($_SESSION['data']['businessDBName']);
 		$sql = "SELECT invoiceID FROM invoiceInfo WHERE userID = '$userID' AND scID = '$scID' AND invoiceAmount = '$invoiceAmount' AND invoiceStatus = '$invoiceStatus' order by invoiceID desc";
+		return $this->db->fetch($sql);
+	}
+  
+  public function getLastSCID($scNameCompany, $scContactNo,$scLimit, $scType)
+	{
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+		$sql = "SELECT scID FROM supplierCustomer WHERE scNameCompany = '$scNameCompany' AND scContactNo = '$scContactNo' AND scLimit = '$scLimit' AND scType = '$scType' order by scID desc";
 		return $this->db->fetch($sql);
 	}
 
@@ -422,6 +462,7 @@ class adminModel extends Model
 	public function addProductToInvoice($invID, $pID, $quantity, $batch, $purchaseUnit, $saleUnit, $pName, $cCatID, $pCatName, $pCatUnit){
 		$this->db->selectDB($_SESSION['data']['businessDBName']);
 		$sql = "INSERT INTO invoice (invoiceID, productID, invoiceQuantity, invoiceBatch, invoicePurchase, invoiceSale, invoiceProductName, invoiceProductCategoryID, invoiceProductCategoryName, invoiceProductCategoryUnit) VALUES ('$invID', '$pID', '$quantity', '$batch', '$purchaseUnit', '$saleUnit', '$pName', '$cCatID', '$pCatName', '$pCatUnit')";
+
 		return $this->db->execute($sql);
 	}
 	public function getQuantityExistingBatch($pID, $batch)
@@ -591,6 +632,13 @@ class adminModel extends Model
 		$sql = "SELECT sum(trxAmount) as paidTotal FROM transaction WHERE trxType = 'invoice' and trxReference = '$value'";
 		return $this->db->fetch($sql);
 	}
+  
+  public function getTotalPaidIndividualInvoiceForDailyReport($value, $date)
+	{
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+		$sql = "SELECT sum(trxAmount) as paidTotal FROM transaction WHERE trxType = 'invoice' and trxReference = '$value' AND trxDate = '$date'";
+		return $this->db->fetch($sql);
+	}
 	
 	public function getSCTransaction($scID)
 	{
@@ -615,6 +663,7 @@ class adminModel extends Model
 		$date = date('Y-m-d');
 		$time = date('H:i:s');
 		$sql = "INSERT INTO transaction (userID, trxDate, trxTime, trxType, trxAmount, trxInfo, scID) VALUES ( '$uID', '$date', '$time', 'withdraw', '$wAmount', '$wNote', '$scID')";
+    //echo $sql."<br>";
 		return $this->db->execute($sql);
 	}
 
@@ -744,19 +793,34 @@ class adminModel extends Model
 	//Daily Profit: SELECT invoiceInfo.invoiceID, (SELECT sum((`invoiceSale`*`invoiceQuantity`)-(`invoicePurchase`*`invoiceQuantity`)) from invoice where invoice.invoiceID = invoiceInfo.invoiceID) from invoiceInfo;
 	public function getDailyProfit($date){
 		$this->db->selectDB($_SESSION['data']['businessDBName']);
-		$sql = "SELECT invoiceInfo.invoiceID, invoiceInfo.invoiceTime, sum(invoice.invoiceSale*invoice.invoiceQuantity) - sum(invoice.invoicePurchase*invoice.invoiceQuantity) - sum(invoiceInfo.invoiceDiscount) as profit from invoiceInfo inner join invoice on invoiceInfo.invoiceID = invoice.invoiceID where invoiceInfo.invoiceType='sale' AND invoiceInfo.invoiceDate = '$date' group by invoiceInfo.invoiceID";
+		$sql = "SELECT invoiceInfo.invoiceID, invoiceInfo.invoiceTime, sum(invoice.invoiceSale*invoice.invoiceQuantity) - sum(invoice.invoicePurchase*invoice.invoiceQuantity) - sum(invoiceInfo.invoiceDiscount) as profit, sum(invoice.invoiceSale*invoice.invoiceQuantity) - invoiceInfo.invoiceDiscount as totalSale from invoiceInfo inner join invoice on invoiceInfo.invoiceID = invoice.invoiceID where invoiceInfo.invoiceType='sale' AND invoiceInfo.invoiceDate = '$date' group by invoiceInfo.invoiceID";
 		//$sql = "SELECT invoiceInfo.invoiceID, invoiceInfo.invoiceTime, (SELECT sum((`invoiceSale`*`invoiceQuantity`)-(`invoicePurchase`*`invoiceQuantity`))- invoiceInfo.invoiceDiscount from invoice where invoice.invoiceID = invoiceInfo.invoiceID) as profit from invoiceInfo where invoiceInfo.invoiceType='sale' AND invoiceInfo.invoiceDate = '$date'";
 		//$sql = "SELECT * from productCategory";
 		return $this->db->fetch($sql);
 	}
-	public function getProfit($from, $to){
+  
+  public function getPreviousInvoiceCollectionOnThisDate($date){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+    $sql = "SELECT * FROM `transaction` join invoiceInfo on transaction.trxReference = invoiceInfo.invoiceID where trxDate = '$date' AND invoiceDate != '$date' AND transaction.trxType = 'invoice' ORDER BY invoiceInfo.invoiceDate desc";
+    return $this->db->fetch($sql);
+  }
+  
+  
+	public function getTotalSalePurchase($from, $to){
 		$this->db->selectDB($_SESSION['data']['businessDBName']);
 		//$sql = "SELECT invoiceInfo.invoiceDate, invoiceInfo.invoiceTime, (SELECT sum((`invoiceSale`*`invoiceQuantity`)-(`invoicePurchase`*`invoiceQuantity`))- invoiceInfo.invoiceDiscount from invoice where invoice.invoiceID = invoiceInfo.invoiceID) as profit from invoiceInfo where invoiceInfo.invoiceType='sale' AND (invoiceInfo.invoiceDate between '$from' AND '$to')";
 		$sql = "SELECT invoiceInfo.invoiceDate, sum(invoice.invoiceSale*invoice.invoiceQuantity) as sale, sum(invoice.invoicePurchase*invoice.invoiceQuantity) as purchase, sum(invoiceInfo.invoiceDiscount) as discount, sum(invoice.invoiceSale*invoice.invoiceQuantity) - sum(invoice.invoicePurchase*invoice.invoiceQuantity) - sum(invoiceInfo.invoiceDiscount) as FinalProfit FROM invoiceInfo INNER JOIN invoice on invoiceInfo.invoiceID = invoice.invoiceID WHERE invoiceInfo.invoiceType = 'sale' AND invoiceInfo.invoiceDate BETWEEN '$from' AND '$to' GROUP BY invoiceInfo.invoiceDate";
 		//$sql = "SELECT * from productCategory";
 		return $this->db->fetch($sql);
 	}
-		public function getExpenseIncomeStatement($from, $to){
+
+	public function getTotalDiscount($from, $to){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+		$sql = "SELECT invoiceInfo.invoiceDate, sum(invoiceInfo.invoiceDiscount) as discount FROM invoiceInfo WHERE invoiceInfo.invoiceType = 'sale' AND invoiceInfo.invoiceDate BETWEEN '$from' AND '$to' GROUP BY invoiceInfo.invoiceDate";
+		return $this->db->fetch($sql);
+	}
+
+	public function getExpenseIncomeStatement($from, $to){
 		$this->db->selectDB($_SESSION['data']['businessDBName']);
 		$sql = "SELECT trxDate, sum(trxAmount) as expense FROM transaction WHERE trxType = 'expense' AND trxDate BETWEEN '$from' AND '$to' GROUP BY trxDate";
 		return $this->db->fetch($sql);
@@ -855,4 +919,77 @@ class adminModel extends Model
 		return $this->db->fetch($sql);
 	}
 	
+  public function getProductPurchaseHistoryForManager(){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+		$sql = "SELECT * FROM invoice join invoiceInfo on invoice.invoiceID = invoiceInfo.invoiceID where invoiceType = 'purchase'";
+		return $this->db->fetch($sql);
+	}
+  
+  /* Ledger SQL Start */
+  public function getTotalSalesFromDateToDate($from, $to){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+		$sql = "SELECT invoiceDate,count(*) as salesNumber, sum(invoiceAmount) as sales, sum(invoiceDiscount) as discount, sum(invoiceAmount) - sum(invoiceDiscount) as TotalSales FROM `invoiceInfo` WHERE invoiceType = 'sale' AND invoiceInfo.invoiceDate BETWEEN '$from' AND '$to' GROUP BY invoiceDate";
+		return $this->db->fetch($sql);
+  }
+  
+  public function getCollenctionOnDate($date){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+    $sql = "select sum(trxAmount) as onDateCollection from transaction where transaction.trxType = 'invoice' AND transaction.trxDate = '$date' AND transaction.trxReference IN (SELECT invoiceID from invoiceInfo WHERE invoiceDate = '$date' AND invoiceType = 'sale')";
+    return $this->db->fetch($sql);
+  }
+  public function getCollectionOtherDate($date){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+    $sql = "select sum(trxAmount) as otherDateCollection from transaction where transaction.trxType = 'invoice' AND transaction.trxDate = '$date' AND transaction.trxReference NOT IN (SELECT invoiceID from invoiceInfo WHERE invoiceDate = '$date')";
+    return $this->db->fetch($sql);
+  }
+  
+  public function getCostOfGoodsSold($date){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+    $sql = "SELECT sum(invoice.invoiceQuantity*invoice.invoicePurchase) as COGS, sum(invoice.invoiceQuantity*invoice.invoiceSale) as Sales, sum(invoice.invoiceQuantity*invoice.invoiceSale) - sum(invoice.invoiceQuantity*invoice.invoicePurchase) as Profit FROM invoiceInfo inner join invoice on invoiceInfo.invoiceID = invoice.invoiceID WHERE invoiceInfo.invoiceType = 'sale' AND invoiceInfo.invoiceDate = '$date'";
+    return $this->db->fetch($sql);
+  }
+  
+  public function getCostOfGoodsSoldByInvoice($invID){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+    $sql = "SELECT sum(invoice.invoiceQuantity*invoice.invoicePurchase) as COGS FROM invoice WHERE invoice.invoiceID = '$invID'";
+    return $this->db->fetch($sql);
+  }
+  
+  public function getSaleInvoiceInfoByDate($date){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+    $sql = "SELECT * FROM invoiceInfo WHERE invoiceInfo.invoiceType = '$invID'";
+    return $this->db->fetch($sql);
+  }
+  
+  /* Ledger SQL End */
+  
+  /* Individual Collection */
+  
+  public function getUserListForCollectionReport($bID){
+		$this->db->selectDB(DB_NAME);
+    $sql = "SELECT userID, name, rank, username FROM businessCredentials WHERE businessID = '$bID' AND password != '1062014'";
+    return $this->db->fetch($sql);
+  }
+  
+  public function getTrxByUserDateToDate($user, $from, $to){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+		$sql = "SELECT * FROM transaction inner join supplierCustomer on transaction.scID = supplierCustomer.scID where userID = '$user' AND trxType = 'invoice' and trxDate BETWEEN '$from' AND '$to' ORDER BY `trxID` ASC";
+    return $this->db->fetch($sql);
+  }
+  
+  /* Individual Collection */
+  
+  
+  public function setActivity($page){
+		$this->db->selectDB($_SESSION['data']['businessDBName']);
+    date_default_timezone_set($_SESSION['data']['businessTimeZone']);
+		$date = date('Y-m-d');
+		$time = date('H:i:s');
+    $dateTime = $date." ".$time;
+    $uName = $_SESSION['data']['name'];
+		$sql = "INSERT INTO activity_log ( `name`, `dateTime`, `page`) VALUES ( '$uName', '$dateTime', '$page')";
+    return $this->db->fetch($sql);
+  }
+  
+  
 }

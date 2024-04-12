@@ -6,6 +6,9 @@ $('#productForSale').dataTable({
   "lengthMenu": [ [3, 10, 25, 50, -1], [3, 10 , 25, 50, "All"] ]
 });
 
+$( "#datepicker" ).datepicker();
+$( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+$('#datepicker').datepicker("setDate", new Date() );
 // 3. Add to Cart on Click From Product For Sale Table
 var i = 2;
 $(document).on('click', 'tr.mouseHover', function(){
@@ -22,9 +25,9 @@ $(document).on('click', 'tr.mouseHover', function(){
 				'<td> <span id="snum'+i+'">'+last+'</span> </td>'+
 				'<td> <input type="hidden" name="pID[]" value="'+productID+'" required> <p class="purProductName">'+productName+'</p>  </td>'+
 				'<td> <input type="hidden" name="batch[]" value="'+productBatch+'" required>'+productBatch+'</td>'+
-				'<td> <input type="hidden" name="stock" value="'+productQuantity+'"> <input class="form-control input-sm" type="number" step="any" name="quantity[]" min="0" oninput="getTotal()" value="1"> </td>'+
+				'<td> <input type="hidden" name="stock" value="'+productQuantity+'"> <input class="form-control input-sm" type="number" step=".01" name="quantity[]" min="0" oninput="getTotal()" value="1"> </td>'+
 	            '<td> <input class="form-control input-sm" type="hidden" step="any" name="purchaseRate[]" oninput="getTotal()" value="'+productPurchase+'"><input class="form-control input-sm" type="number" min="0" name="saleRate[]" oninput="getTotal()" value="'+productSale+'"> </td>'+
-	            '<td> <input class="form-control input-sm" type="number" step="any" name="total" value=""  min="0"> </td>'+
+	            '<td> <input class="form-control input-sm" type="number" step=".01" name="total" value=""  min="0"> </td>'+
 	            '<td> <i class="fa fa-times fa-lg delete" title="Delete category"></i> </td>'+
 				'</tr>';
 			i++;

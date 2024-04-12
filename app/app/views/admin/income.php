@@ -3,6 +3,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
+                <?php include 'system/notification.php'; ?>
                 <h2 class="page-header">Income Statement</h2>
             </div>
             <!-- /.col-lg-12 -->
@@ -22,31 +23,43 @@
           </form>
         </div>
       <?php 
-        if(isset($data['profit'])){
+        if(isset($data['sale-purchase'])){
           ?>
       <div class="row">
         <h4><u>Profit</u></h4>
              <table class="table table-striped table-bordered" cellspacing="0" id="cashList">
                 <thead>
                     <tr>
-                        <td width="50%">Date</td>
-                        <td>Profit</td>
+                        <td>Date</td>
+                        <td>Sales (A)</td>
+                        <td>Discount (B)</td>
+                        <td>Net Sales (A-B)</td>
+                        <td>Cost of Good Sold (C)</td>
+                        <td>Profit (A-B-C)</td>
                     </tr>
                 </thead>
 
                 <tbody>
                     <?php
           $totalProfit = 0;
-                         while($row = $data['profit']->fetch_assoc()){
+          $discountConter = 0;
+                         while($row = $data['sale-purchase']->fetch_assoc() ){
+                          $discountData = $data['discount']->fetch_assoc();
                            $profitDate = date("d-m-Y", strtotime($row['invoiceDate']));
+                           $netSales = (float)$row['sale']-(float)$discountData['discount'];
+                           $dailyProfit = (float)$row['sale']-(float)$discountData['discount']-(float)$row['purchase'];
                            echo "<tr>";
                             echo "<td><a href='".BASE_URL."admin/report/profit?date=".$profitDate."' target='_blank'>".$profitDate."</a></td>";
-                            echo "<td>".$_SESSION['data']['businessCurrency']." ".$row['FinalProfit']."</td>";
+                            echo "<td>".$_SESSION['data']['businessCurrency']." ".$row['sale']."</td>";
+                            echo "<td>".$_SESSION['data']['businessCurrency']." ".$discountData['discount']."</td>";
+                            echo "<td>".$_SESSION['data']['businessCurrency']." ".$netSales."</td>";
+                            echo "<td>".$_SESSION['data']['businessCurrency']." ".$row['purchase']."</td>";
+                            echo "<td>".$_SESSION['data']['businessCurrency']." ".$dailyProfit."</td>";
                             echo "</tr>";
-                           $totalProfit+= (float)$row['FinalProfit'];
+                           $totalProfit+= (float)$row['sale']-(float)$discountData['discount']-(float)$row['purchase'];
                         }
                           echo "<tr>";
-                            echo "<td><h4 align='right'><b>Total Profit</b></h4></td>";
+                            echo "<td colspan='5'><h4 align='right'><b>Total Profit</b></h4></td>";
                             echo "<td><h4><b>".$_SESSION['data']['businessCurrency']." ".(float)$totalProfit."</b></h4></td>";
                             echo "</tr>";
                     ?>

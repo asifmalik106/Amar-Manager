@@ -3,6 +3,7 @@
     <div id="page-wrapper">
       <div class="row">
             <div class="col-lg-12">
+                <?php include 'system/notification.php'; ?>
                 <h2 class="page-header"><?php echo $profileLang[$data['data']['type']]; ?></h2>
 							<input id="scID" type="hidden" value="<?php echo $data['data']['sc']['scID']; ?>">
             </div>
@@ -155,7 +156,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $profileLang['close']; ?></button>
-          <button type="button" class="btn btn-success" onclick="addCashToInvoice()"><?php echo $profileLang['payDue']; ?></button>
+          <button type="button" class="btn btn-success" id="addCashToInvoice" onclick="addCashToInvoice()"><?php echo $profileLang['payDue']; ?></button>
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?php echo BASE_URL; ?>">Retail Manager</a>
+                <a class="navbar-brand" href="<?php echo BASE_URL; ?>">আমার Manager</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -159,6 +159,10 @@
                                 <li>
                                     <a href="<?php echo BASE_URL; ?>admin/invoice/purchase">  <?php echo $sidebar['purchaseInvoices']; ?></a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo BASE_URL; ?>admin/invoice/discount">  Discounted Invoice</a>
+                                </li>
+                              
                             </ul>
                         </li>
                             
@@ -182,6 +186,14 @@
                                 <li>
                                     <a href="<?php echo BASE_URL; ?>admin/report/income">  <?php echo $sidebar['incomeStatement']; ?></a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo BASE_URL; ?>admin/report/ledger"> Ledger Statement</a>
+                                </li>
+                              
+                              <li>
+                                    <a href="<?php echo BASE_URL; ?>admin/report/collection"> Collection Report</a>
+                                </li>
+                            
                             </ul>
                         </li>
               

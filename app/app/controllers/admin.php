@@ -18,7 +18,7 @@ class admin extends Controller
 	public function index(){
 		$this->sessionVerify('verify');
 		$data = array(
-				'title'=> 'Dashboard | Retail Manager'
+				'title'=> 'Dashboard | আমার Manager'
 				);
 		$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -31,6 +31,7 @@ class admin extends Controller
 		$this->load->model('adminModel');
 		$dashModel = new adminModel();
 		$result = $dashModel->getStock();
+    $dashModel->setActivity( "Admin Dashboard");
 		$data['data']['stock'] = $result;
 		$data['data']['balance'] = $dashModel->getTotalCashBalance();
 		$customers = $dashModel->getCustomer();
@@ -61,7 +62,7 @@ class admin extends Controller
 		$data['data']['unearned'] = $unearnedTotal;
 		$products = $dashModel->getProducts();
 		$warning = $dashModel->getStockWarning()->fetch_assoc()['warning'];
-		$stock = $dashModel->getStockOver()->fetch_assoc()['over'];
+		$stock = $dashModel->getStockOver()->fetch_assoc()['overf'];
 		$data['data']['warning'] = $warning;
 		$data['data']['out'] = $stock;
 		$this->load->view('admin/dashboard', $data);
@@ -71,6 +72,8 @@ class admin extends Controller
 	public function misc(){
 		$this->sessionVerify('verify');
 		if(func_get_arg(0)==null){
+		    $dashModel = new adminModel();
+            $dashModel->setActivity( "Misc Error Occured!");
 			echo "An Error Occured!";
 		}
 		else{
@@ -78,7 +81,7 @@ class admin extends Controller
 			if($reqData[0]=='receivable')
 			{
 				$data = array(
-					'title'=> 'Cash Receivable from Customers | Retail Manager'
+					'title'=> 'Cash Receivable from Customers | আমার Manager'
 					);
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -90,6 +93,7 @@ class admin extends Controller
 							);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+                $dashModel->setActivity( "Cash Receivable from Customers");
 				$result = $dashModel->getCustomer();
 				$finalOutput = array();
 
@@ -124,7 +128,7 @@ class admin extends Controller
 			else if($reqData[0]=='unearned')
 			{
 				$data = array(
-					'title'=> 'Unearned Revenues from Customers | Retail Manager'
+					'title'=> 'Unearned Revenues from Customers | আমার Manager'
 					);
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -136,6 +140,7 @@ class admin extends Controller
 							);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Unearned Revenues from Customers");
 				$result = $dashModel->getCustomer();
 				$finalOutput = array();
 
@@ -170,7 +175,7 @@ class admin extends Controller
 			else if($reqData[0]=='dangerzone')
 			{
 				$data = array(
-					'title'=> 'Danger Zone Customers | Retail Manager'
+					'title'=> 'Danger Zone Customers | আমার Manager'
 					);
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -182,6 +187,7 @@ class admin extends Controller
 							);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Danger Zone Customers");
 				$result = $dashModel->getCustomer();
 				$finalOutput = array();
 
@@ -217,7 +223,7 @@ class admin extends Controller
 			
 			else if($reqData[0]=="productWarning"){
 				$data = array(
-					'title'=> 'Product Warning | Retail Manager'
+					'title'=> 'Product Warning | আমার Manager'
 				);
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 									'dataTables/css/dataTables.responsive.css'
@@ -229,6 +235,7 @@ class admin extends Controller
 									);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Product Warning");
 				$result = $dashModel->getStock();
 				$data['data']['stock'] = $result;
 				$data['data']['type'] = 'warning';
@@ -236,7 +243,7 @@ class admin extends Controller
 			}
 			else if($reqData[0]=="outOfStock"){
 				$data = array(
-					'title'=> 'Out of Stock Product | Retail Manager'
+					'title'=> 'Out of Stock Product | আমার Manager'
 				);
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 									'dataTables/css/dataTables.responsive.css'
@@ -248,6 +255,7 @@ class admin extends Controller
 									);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Out of Stock Product");
 				$result = $dashModel->getStock();
 				$data['data']['stock'] = $result;
 				$data['data']['type'] = 'outOfStock';
@@ -261,7 +269,7 @@ class admin extends Controller
 		$this->sessionVerify('verify');
 		if(func_get_arg(0)==null){
 			$data = array(
-					'title'=> 'Product Category | Retail Manager'
+					'title'=> 'Product Category | আমার Manager'
 					);
 						$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 						'dataTables/css/dataTables.responsive.css'
@@ -271,7 +279,9 @@ class admin extends Controller
 							'dataTables/js/dataTables.responsive.js',
 						'js/page/adminCategory.js'
 						);
-	
+						$this->load->model('adminModel');
+	        $dashModel = new adminModel();
+			$dashModel->setActivity( "Product Category Page");
 			$this->load->view('admin/category', $data);
 		}else{ 
 
@@ -290,6 +300,7 @@ class admin extends Controller
 						$catUnit = Validation::verify($_POST['newCatUnit']);
 						$this->load->model('adminModel');
 						$dashModel = new adminModel();
+						$dashModel->setActivity( "Add Category Page");
 						$result = $dashModel->isUniqueCategory($catName, $catUnit);
 						if(($result->num_rows)==0)
 						{
@@ -326,6 +337,7 @@ class admin extends Controller
 				global $category;
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Get All Category Page");
 				$result = $dashModel->getAllCategory();
 				$i = 1;
 				echo	"<table id=\"categoryTable\" class=\"table table-striped table-bordered\">";
@@ -369,6 +381,7 @@ class admin extends Controller
 			{
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Delete Category Page");
 				if($_POST['submit']=="true")
 				{
 					if($_POST['deleteCatID']!='')
@@ -408,6 +421,7 @@ class admin extends Controller
 						$catUnit = Validation::verify($_POST['editCatUnit']);
 						$this->load->model('adminModel');
 						$dashModel = new adminModel();
+			            $dashModel->setActivity( "Edit Category Page");
 						$result = $dashModel->isUniqueCategory($catName, $catUnit);
 						if(($result->num_rows)==0)
 						{
@@ -453,7 +467,7 @@ class admin extends Controller
 		if(func_get_arg(0)==null)
 		{
 			$data = array(
-				'title'=> 'Products | Retail Manager'
+				'title'=> 'Products | আমার Manager'
 				);
 			$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -465,6 +479,7 @@ class admin extends Controller
 							);
 			$this->load->model('adminModel');
 			$dashModel = new adminModel();
+			$dashModel->setActivity( "Products Page");
 			$result = $dashModel->getAllProduct();
 			$data['data']['product'] = $result;
 			$this->load->view('admin/product', $data);
@@ -478,6 +493,7 @@ class admin extends Controller
 				global $newProduct;
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Get All Products Page");
 				$result = $dashModel->getAllProduct();
 				$i = 1;
 				echo '<table id="productTable" class="table table-striped table-bordered">';
@@ -527,6 +543,7 @@ class admin extends Controller
 						$pLimit = Validation::verify($_POST['editProductLimit']);
 						$this->load->model('adminModel');
 						$dashModel = new adminModel();
+						$dashModel->setActivity( "Edit Products Page");
 						//$result = $dashModel->isUniqueProduct($pName, $cID);
 						if(0==0)
 						{
@@ -561,6 +578,7 @@ class admin extends Controller
 				$pID = Validation::verify($_POST['pID']);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Info Products Page");
 				$scInfo = $dashModel->getAllProduct($pID);
 				$scInfo = $scInfo->fetch_assoc();
 				echo '<div class="col-md-4">';
@@ -595,7 +613,7 @@ class admin extends Controller
 			{
 				$select2Lang = 'select2/js/lang/'.$_SESSION['data']['language'].'.js';
 				$data = array(
-						'title'=> 'Add Product | Retail Manager'
+						'title'=> 'Add Product | আমার Manager'
 						);
 
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
@@ -609,6 +627,7 @@ class admin extends Controller
 					);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Add Products Page");
 				$result = $dashModel->getAllCategory();
 				$result2 = $dashModel->getAllCategory();
 				$data['data']['category'] = $result; 
@@ -628,6 +647,8 @@ class admin extends Controller
 
 						$this->load->model('adminModel');
 						$dashModel = new adminModel();
+						
+				$dashModel->setActivity( "New Products Page");
 						$result = $dashModel->isUniqueProduct($productName, $productCategoryID);
 						if(($result->num_rows)==0)
 						{
@@ -671,6 +692,7 @@ class admin extends Controller
 							$saleUnit = Validation::verify($_POST['saleUnit']);
 							$this->load->model('adminModel');
 							$dashModel = new adminModel();
+				$dashModel->setActivity( "Batch Products Page");
 							$result = $dashModel->isUniqueBatch($pID, $batch);
 							if((($result->num_rows)==0)||($batch==$exBatch))
 							{
@@ -707,6 +729,8 @@ class admin extends Controller
 					$this->load->model('adminModel');
 					$dashModel = new adminModel();
 					$batch = $dashModel->getStock($pID);
+					
+				$dashModel->setActivity( "Get Products Page");
 					while($row = $batch->fetch_assoc()){
 										echo "<tr>";
 										echo "<td>".$row['batch']."</td>";
@@ -731,6 +755,7 @@ class admin extends Controller
 							$batch = Validation::verify($_POST['batch']);
 							$this->load->model('adminModel');
 							$dashModel = new adminModel();
+				$dashModel->setActivity( "Delete Products Page");
 							$result = $dashModel->isBatchEmpty($pID, $batch)->fetch_assoc();
 							if($result['quantity']==0)
 							{
@@ -763,11 +788,12 @@ class admin extends Controller
 			}
 			else if($reqData[0]=='barcode'){
 				$data = array(
-					'title'=> 'Barcode | Retail Manager'
+					'title'=> 'Barcode | আমার Manager'
 				);
 				$data['js'] = array('js/JsBarcode.code128.min.js','js/page/barcode.js');
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "Batch Products Page");
 				$pID = $dashModel->getProducts();
 				$productArray = array();
 				while($row = $pID->fetch_assoc()){
@@ -800,7 +826,7 @@ class admin extends Controller
 			}
 			else{
 				$data = array(
-						'title'=> 'Product | Retail Manager'
+						'title'=> 'Product | আমার Manager'
 						);
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -812,6 +838,7 @@ class admin extends Controller
 							);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+				$dashModel->setActivity( "All Products Page");
 				$scInfo = $dashModel->getAllProduct($reqData[0]);
 				$scInfo = $scInfo->fetch_assoc();
 				$data['data']['product'] = $scInfo;
@@ -834,7 +861,7 @@ class admin extends Controller
 		if(func_get_arg(0)==null)
 		{
 			$data = array(
-				'title'=> 'Customers | Retail Manager'
+				'title'=> 'Customers | আমার Manager'
 				);
 			$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 						'dataTables/css/dataTables.responsive.css'
@@ -846,6 +873,7 @@ class admin extends Controller
 						);
 			$this->load->model('adminModel');
 			$dashModel = new adminModel();
+    $dashModel->setActivity( "Admin Customer");
 			$result = $dashModel->getCustomer();
 			$finalOutput = array();
 			
@@ -880,7 +908,7 @@ class admin extends Controller
 			if($reqData[0]=='new')
 			{
 				$data = array(
-				'title'=> 'Add New Customer | Retail Manager'
+				'title'=> 'Add New Customer | আমার Manager'
 				);
 				$data['js'] = array('js/page/adminCustomer.js');
 
@@ -896,13 +924,21 @@ class admin extends Controller
 						$newCustomerPhone = Validation::verify($_POST['newCPhone']);
 						$newCustomerAddress = Validation::verify($_POST['newCAddress']);
 						$newCustomerLimit = Validation::verify($_POST['newCLimit']);
-
+            $newCustomerDue =  Validation::verify($_POST['newCDue']);
 						$this->load->model('adminModel');
 						$dashModel = new adminModel();
 						$result = $dashModel->isUniqueCustomer($newCustomerName, $newCustomerPhone);
 						if(($result->num_rows)==0)
 						{
 							$result = $dashModel->addCustomer($newCustomerName, $newCustomerFather, $newCustomerPhone, $newCustomerAddress, $newCustomerLimit);
+              if($newCustomerDue>0){
+                $scID = $dashModel->getLastSCID($newCustomerName, $newCustomerPhone,$newCustomerLimit, 'customer')->fetch_assoc()['scID'];
+                $invInf = $dashModel->addInvoiceInfoWithDate($scID,'1970-01-01', $newCustomerDue,0,'unpaid','sale','Previous Due');
+                $invoiceID = $dashModel->getLastInvoiceID($_SESSION['data']['userID'], $scID, $newCustomerDue,'unpaid');
+					      $invoiceID = $invoiceID->fetch_assoc()['invoiceID'];
+                $final_result = $dashModel->addProductToInvoice($invoiceID, 0,1, 1, $newCustomerDue, $newCustomerDue, 'Previous Due',0, '','');
+              }
+              
 							if($result)
 							{
 								echo "true";
@@ -1237,7 +1273,8 @@ class admin extends Controller
 						}
 						else
 						{
-							echo "false";
+						    var_dump($paymentInfo);
+							echo "false1";
 						}
 					}else{
 						echo "empty";
@@ -1288,7 +1325,7 @@ class admin extends Controller
 				$invT = $dashModel->getTotalInvoiceSC($reqData[0])->fetch_assoc()['invoiceTotal'];
 				$paidT = $dashModel->getTotalPaidSC($reqData[0])->fetch_assoc()['paidTotal'];
 				$data = array(
-				'title'=> $scResult['scNameCompany'].' | Retail Manager'
+				'title'=> $scResult['scNameCompany'].' | আমার Manager'
 				);
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -1317,7 +1354,7 @@ class admin extends Controller
 		if(func_get_arg(0)==null)
 		{
 			$data = array(
-				'title'=> 'Suppliers | Retail Manager'
+				'title'=> 'Suppliers | আমার Manager'
 				);
 			$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 						'dataTables/css/dataTables.responsive.css'
@@ -1363,7 +1400,7 @@ class admin extends Controller
 			if($reqData[0]=='new')
 			{
 				$data = array(
-				'title'=> 'Add New Supplier | Retail Manager'
+				'title'=> 'Add New Supplier | আমার Manager'
 				);
 				$data['js'] = array('js/page/adminSupplier.js');
 
@@ -1785,7 +1822,7 @@ class admin extends Controller
 				$invT = $dashModel->getTotalInvoiceSC($reqData[0])->fetch_assoc()['invoiceTotal'];
 				$paidT = $dashModel->getTotalPaidSC($reqData[0])->fetch_assoc()['paidTotal'];
 				$data = array(
-				'title'=> $scResult['scNameCompany'].' | Retail Manager'
+				'title'=> $scResult['scNameCompany'].' | আমার Manager'
 				);
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -1842,7 +1879,7 @@ class admin extends Controller
 		{
 			$select2Lang = 'select2/js/lang/'.$_SESSION['data']['language'].'.js';
 			$data = array(
-					'title'=> 'Purchase Entry | Retail Manager'
+					'title'=> 'Purchase Entry | আমার Manager'
 					);
 			$data['css'] = array('select2/css/select2.min.css',
 								 'dataTables/css/dataTables.bootstrap.min.css',
@@ -1859,7 +1896,7 @@ class admin extends Controller
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
 				$result = $dashModel->getSupplier();
-			
+			$dashModel->setActivity( "Admin Purchase");
 			
 				
 	
@@ -2143,14 +2180,15 @@ class admin extends Controller
 		{
 			$select2Lang = 'select2/js/lang/'.$_SESSION['data']['language'].'.js';
 			$data = array(
-					'title'=> 'Sale Entry | Retail Manager'
+					'title'=> 'Sale Entry | আমার Manager'
 					);
 			$data['css'] = array('select2/css/select2.min.css',
 								 'dataTables/css/dataTables.bootstrap.min.css',
 							 	 'dataTables/css/dataTables.responsive.css',
-									'css/toastr.min.css'
+									'css/toastr.min.css',
+                 'css/jquery-ui.css'
 							);
-			$data['js'] = array('dataTables/js/jquery.dataTables.min.js',
+			$data['js'] = array('dataTables/js/jquery.dataTables.min.js','js/jquery-ui.js',
 								'dataTables/js/dataTables.bootstrap.min.js',
 								'dataTables/js/dataTables.responsive.js',
 								'select2/js/select2.min.js',
@@ -2161,6 +2199,7 @@ class admin extends Controller
 						);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+      $dashModel->setActivity( "Admin Sale");
 				$result = $dashModel->getCustomer();
 
 	
@@ -2290,8 +2329,8 @@ class admin extends Controller
 				$customerID = Validation::verify($_POST['customerID']);
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
-				$invT = $dashModel->getTotalInvoiceSC($scID)->fetch_assoc()['invoiceTotal'];
-				$paidT = $dashModel->getTotalPaidSC($scID)->fetch_assoc()['paidTotal'];
+				$invT = $dashModel->getTotalInvoiceSC($customerID)->fetch_assoc()['invoiceTotal'];
+				$paidT = $dashModel->getTotalPaidSC($customerID)->fetch_assoc()['paidTotal'];
 				$balance = $paidT - $invT;
 				$payFromBalance = Validation::verify($_POST['payFromBalanceInput']);
 				$grandTotal = 0.0;
@@ -2362,7 +2401,8 @@ class admin extends Controller
 				{
 					$thirdCheck = true;
 				}
-				$discount = Validation::verify($_POST['discount']);
+				$discount = floatval(Validation::verify($_POST['discount']));
+				var_dump($discount);
 				$grandTotal = Validation::verify($_POST['grandTotal']);
 				$invoiceNote = Validation::verify($_POST['invoiceNote']);
 				$grandTotalFinal = $grandTotal - $discount;
@@ -2384,10 +2424,15 @@ class admin extends Controller
 					$status = 'paid';
 				}
 				
+				var_dump($firstCheck);
+				var_dump($secondCheck);
+				var_dump($thirdCheck);
+
 				//Last Step
 				if($firstCheck && $secondCheck && $thirdCheck){
 					
-					$invInf = $dashModel->addInvoiceInfo($customerID,$grandTotal,$discount,$status,'sale',$invoiceNote);
+          
+          $invInf = $dashModel->addInvoiceInfo($customerID,$grandTotal,$discount,$status,'sale',$invoiceNote);
 					$invoiceID = $dashModel->getLastInvoiceID($_SESSION['data']['userID'], $customerID, $grandTotal,$status);
 					$invoiceID = $invoiceID->fetch_assoc()['invoiceID'];
 					if($payFromBalance>0){
@@ -2395,7 +2440,10 @@ class admin extends Controller
 						$paymentInfo = $dashModel->addWithdraw($customerID,$payFromBalance, $note);
 					}
 					if($paymentTotal>0){
-						$dashModel->addInvoiceTrx($invoiceID, $paymentTotal, $customerID);
+						$test = $dashModel->addInvoiceTrx($invoiceID, $paymentTotal, $customerID);
+						/*echo "<pre>Hello".$invoiceID." ".$paymentTotal." ".$customerID;
+						var_dump($test->fetch_assoc());
+						echo "</pre>";*/
 					}
 					
 					$cashNote = "Invoice: ".$invoiceID.". Cash Receive";
@@ -2411,6 +2459,7 @@ class admin extends Controller
 					if($_POST['sms']=='on'){
 						SMS::verifySMS(1,$invoiceID);
 					}
+					//die();
 					$this->load->redirectIn('admin/invoice/'.$invoiceID);
 				}
 				else{
@@ -2432,7 +2481,7 @@ class admin extends Controller
 		$this->sessionVerify('verify');
 		if(func_get_arg(0)==null){
 			$data = array(
-				'title'=> 'Invoice Return | Retail Manager'
+				'title'=> 'Invoice Return | আমার Manager'
 			);
 			$data['js'] = array('js/page/adminReturn.js'); 
 			$this->load->view('admin/return', $data);
@@ -2451,7 +2500,7 @@ class admin extends Controller
 							echo "wrong";//404
 						}else{
 							$data = array(
-								'title'=> ' Invoice# '.$reqData[0].' | Retail Manager'
+								'title'=> ' Invoice# '.$reqData[0].' | আমার Manager'
 							);
 							$data['data']['info'] = $result;
 							
@@ -2497,7 +2546,7 @@ class admin extends Controller
                                 echo "<td><input type='hidden' name='newPID[]' value='".$row['productID']."'>".$row['invoiceProductName']."</td>";
                                 echo "<td>".$row['invoiceQuantity']." ".$row['invoiceProductCategoryUnit']."</td>";
                                 echo "<td><input type='hidden' name='newBatch[]' value='".$row['invoiceBatch']."'>".$row[$price]."</td>";
-                                echo "<td><input name='newQty[]' type='number' min='0' step='0.01' max='".$row['invoiceQuantity']."' value='".$row['invoiceQuantity']."'</td>";
+                                echo "<td><input name='newQty[]' type='number' min='0' step='0.01' max='".$row['invoiceQuantity']."' value='".$row['invoiceQuantity']."' required></td>";
 
                                 echo "</tr>";    
                                 $i++;
@@ -2506,7 +2555,7 @@ class admin extends Controller
 
                     echo '</tbody>';
                echo '</table>';
-							  echo '<div class="form-group"><label for="discount">'.$invoiceReturn['discountAmount'].'</label><input type="number" name="discount" id="discount" placeholder="Enter Discount Amount" value="'.$result['invoiceDiscount'].'"></div>';
+							  echo '<div class="form-group"><label for="discount">'.$invoiceReturn['discountAmount'].'</label><input type="number" name="discount" id="discount" placeholder="Enter Discount Amount" value="'.$result['invoiceDiscount'].'" required></div>';
             echo '</div>';
 							echo '<input class="btn btn-primary" type="submit" value="'.$invoiceReturn['submit'].'"></form>';
 							//html code end
@@ -2654,7 +2703,7 @@ class admin extends Controller
 					echo "<pre>";
 					print_r($executeAdvanceUpdate);
 					echo "</pre>";
-						$this->load->redirectIn('admin/invoice/'.$_POST['returnInvoiceID']);
+					//	$this->load->redirectIn('admin/invoice/'.$_POST['returnInvoiceID']);
 					}
 					else{
 						echo "False";
@@ -2754,7 +2803,7 @@ class admin extends Controller
 		if(func_get_arg(0)==null)
 		{
 			$data = array(
-				'title'=> 'Cash Transactions | Retail Manager'
+				'title'=> 'Cash Transactions | আমার Manager'
 				);
 			$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -2797,7 +2846,7 @@ class admin extends Controller
 			if($reqData[0]=='accounts')
 			{
 				$data = array(
-				'title'=> 'Cash Accounts | Retail Manager'
+				'title'=> 'Cash Accounts | আমার Manager'
 				);
 				$data['js'] = array('js/page/adminCash.js');
 
@@ -2807,7 +2856,7 @@ class admin extends Controller
 			if($reqData[0]=='new')
 			{
 				$data = array(
-				'title'=> 'Add New Cash Transaction | Retail Manager'
+				'title'=> 'Add New Cash Transaction | আমার Manager'
 				);
 				$data['js'] = array('js/page/adminCash.js');
 				$this->load->model('adminModel');
@@ -2979,7 +3028,7 @@ class admin extends Controller
 		if(func_get_arg(0)==null)
 		{
 			$data = array(
-				'title'=> 'Expenses | Retail Manager'
+				'title'=> 'Expenses | আমার Manager'
 				);
 			$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -3022,7 +3071,7 @@ class admin extends Controller
 			if($reqData[0]=='category')
 			{
 				$data = array(
-				'title'=> 'Expense Categories | Retail Manager'
+				'title'=> 'Expense Categories | আমার Manager'
 				);
 				$data['js'] = array('js/page/adminExpense.js');
 
@@ -3032,7 +3081,7 @@ class admin extends Controller
 			if($reqData[0]=='new')
 			{
 				$data = array(
-				'title'=> 'Add New Expense | Retail Manager'
+				'title'=> 'Add New Expense | আমার Manager'
 				);
 				$data['js'] = array('js/page/adminExpense.js');
 				$this->load->model('adminModel');
@@ -3185,6 +3234,7 @@ class admin extends Controller
 
 				$this->load->model('adminModel');
 				$dashModel = new adminModel();
+        $dashModel->setActivity( "Admin Invoice");
 				$result = $dashModel->getAllInvoiceList($reqData[0]);
 				$finalInvoiceList = array();
 				$localInvoiceList = array();
@@ -3199,7 +3249,7 @@ class admin extends Controller
 				}
 					$reqData[0] = ucfirst($reqData[0]);
 					$data = array(
-					'title'=> $reqData[0].' Invoices | Retail Manager'
+					'title'=> $reqData[0].' Invoices | আমার Manager'
 				);
 				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 							'dataTables/css/dataTables.responsive.css'
@@ -3213,6 +3263,41 @@ class admin extends Controller
 				$data['data']['type'] = $reqData[0];
 				$this->load->view('admin/invoiceList', $data);
 			}
+      
+      else if($reqData[0]=='discount')
+			{
+
+				$this->load->model('adminModel');
+				$dashModel = new adminModel();
+				$result = $dashModel->getAllInvoiceList('sale');
+				$finalInvoiceList = array();
+				$localInvoiceList = array();
+				while($row = $result->fetch_assoc())
+				{
+					$localInvoiceList = array_merge($localInvoiceList, $row);
+					$fullUserName = $dashModel->getUserFullName($row['userID']);
+					$fullUserName = $fullUserName->fetch_assoc();
+					$localInvoiceList = array_merge($localInvoiceList, $fullUserName);
+					$finalInvoiceList[] = $localInvoiceList;	
+					$localInvoiceList = array();
+				}
+					$reqData[0] = ucfirst($reqData[0]);
+					$data = array(
+					'title'=> $reqData[0].' Invoices | আমার Manager'
+				);
+				$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
+							'dataTables/css/dataTables.responsive.css'
+							);
+				$data['js'] = array('dataTables/js/jquery.dataTables.min.js',
+							'dataTables/js/dataTables.bootstrap.min.js',
+							'dataTables/js/dataTables.responsive.js',
+							'js/page/adminInvoice.js'
+							);
+				$data['data']['invoice'] = $finalInvoiceList;
+				$data['data']['type'] = $reqData[0];
+				$this->load->view('admin/discountedInvoiceList', $data);
+			}
+      
 			else if($reqData[0]=='payment'){
 				if($_POST['submit']=="true")
 				{
@@ -3342,14 +3427,18 @@ class admin extends Controller
 						echo "null";//404
 					}else{
 						$data = array(
-							'title'=> ' Invoice# '.$reqData[0].' | Retail Manager'
+							'title'=> ' Invoice# '.$reqData[0].' | আমার Manager'
 						);
+            $dashModel->setActivity( "Admin  Invoice# ".$reqData[0]);
 						$data['data']['info'] = $result;
 						$fullUserName = $dashModel->getUserFullName($result['userID']);
 						$fullUserName = $fullUserName->fetch_assoc();
 						$data['data']['info']['user'] = $fullUserName['name'];
 						$data['data']['invoice'] = $dashModel->getInvoiceList($reqData[0]);
 						$data['data']['paid'] = $dashModel->getInvoicePaidAmount($reqData[0]);
+						/*echo "<pre>";
+						print_r($data['data']['paid']->fetch_assoc());
+						echo "</pre>";*/
 						$this->load->view('admin/invoice', $data);
 					}
 				}else{
@@ -3364,7 +3453,7 @@ class admin extends Controller
 		$this->sessionVerify('verify');
 		if(func_get_arg(0)==null){
 			$data = array(
-				'title'=> 'Drawings | Retail Manager'
+				'title'=> 'Drawings | আমার Manager'
 				);
 			$data['css'] = array('dataTables/css/dataTables.bootstrap.min.css',
 								'dataTables/css/dataTables.responsive.css'
@@ -3404,7 +3493,7 @@ class admin extends Controller
 			if($reqData[0]=='new')
 			{
 				$data = array(
-					'title'=> 'Add New Drawing | Retail Manager'
+					'title'=> 'Add New Drawing | আমার Manager'
 				);
 				$data['js'] = array('js/page/adminDrawing.js');
 				$this->load->model('adminModel');
@@ -3460,7 +3549,7 @@ class admin extends Controller
 		$this->sessionVerify('verify');
 		if(func_get_arg(0)==null){
 			$data = array(
-				'title'=> 'Settings | Retail Manager'
+				'title'=> 'Settings | আমার Manager'
 			);
 			$this->load->view('admin/settings', $data);
 		}else{
@@ -3468,7 +3557,7 @@ class admin extends Controller
 			if($reqData[0]=='language')
 			{
 				$data = array(
-					'title'=> 'Settings | Retail Manager'
+					'title'=> 'Settings | আমার Manager'
 				);
 				$data['langMsg'] = null;
 				$this->load->model('adminModel');
@@ -3488,7 +3577,7 @@ class admin extends Controller
 			}
 			else if($reqData[0]=='password'){
 				$data = array(
-					'title'=> 'Settings | Retail Manager'
+					'title'=> 'Settings | আমার Manager'
 				);
 				$old = Validation::verify($_POST['old']);
 				$new = Validation::verify($_POST['new']);
@@ -3522,7 +3611,7 @@ class admin extends Controller
 			$this->load->model('adminModel');
 			$dashModel = new adminModel();
 			$data = array(
-				'title'=> 'SMS | Retail Manager'
+				'title'=> 'SMS | আমার Manager'
 			);
 			$data['data']['balance'] = $dashModel->getSMSBalance()->fetch_assoc()['balance'];
 			$data['data']['template'] = $dashModel->getSMSTemplate();
@@ -3542,6 +3631,8 @@ class admin extends Controller
 
 			if($reqData[0]=='profit')
 			{
+    $dashModel->setActivity( "Admin Daily Profit");
+        
 				$data = array(
 				'title'=> 'Daily Profit Report'
 				);
@@ -3550,7 +3641,27 @@ class admin extends Controller
 				if(isset($_GET['date'])){
 					$date = date_create($_GET['date']);
 					$date = date_format($date,"Y-m-d");
+          
+          $dateCollection = date_format(date_create($_GET['date']),"Y-m-d");
 					$data['profit'] = $dashModel->getDailyProfit($date);
+          $finalStmt = [];
+          while($row = $data['profit']->fetch_assoc()){
+            $paymentInfo = $dashModel->getTotalPaidIndividualInvoiceForDailyReport($row['invoiceID'], $dateCollection)->fetch_assoc();
+            $row['todaysCollection'] = $paymentInfo['paidTotal'];
+            $row['cogs']= $dashModel->getCostOfGoodsSoldByInvoice($row['invoiceID'])->fetch_assoc()['COGS']; 
+            $row['profit'] = $row['totalSale'] - $row['cogs'];
+            //pre_print($row['cogs']);
+            
+           array_push($finalStmt, $row);
+            
+          }
+          /*for($i = 0; $i<count($finalStmt); $i++){
+            $finalStmt[$i]['cogs']
+          }*/
+          $data['profit'] = $finalStmt;
+          //pre_print($finalStmt);
+          $data['previous'] = $dashModel->getPreviousInvoiceCollectionOnThisDate($dateCollection);
+          $data['date'] = $dateCollection;
 				}
 				
 				//print_r($data['profit']->fetch_assoc());
@@ -3559,6 +3670,7 @@ class admin extends Controller
 			}
 			if($reqData[0]=='income')
 			{
+        $dashModel->setActivity( "Admin Income Statement");
 				$data = array(
 				'title'=> 'Income Statement'
 				);
@@ -3569,7 +3681,8 @@ class admin extends Controller
 					$from = date_format($from,"Y-m-d");
 					$to = date_create($_GET['to']);
 					$to = date_format($to,"Y-m-d");
-					$data['profit'] = $dashModel->getProfit($from,$to);
+					$data['sale-purchase'] = $dashModel->getTotalSalePurchase($from,$to);
+					$data['discount'] = $dashModel->getTotalDiscount($from,$to);
 					$data['expense'] = $dashModel->getExpenseIncomeStatement($from, $to);
 				}
 				
@@ -3577,10 +3690,128 @@ class admin extends Controller
 
 				$this->load->view('admin/income', $data);
 			}
-			
+			if($reqData[0]=='ledger'){
+        $data = array(
+				'title'=> 'Ledger Report'
+				);
+        $dashModel->setActivity( "Admin Ledger");
+				$data['css'] = array('css/jquery-ui.css');
+				$data['js'] = array('js/jquery-ui.js','js/page/adminProfit.js');
+        if(isset($_GET['from'])){
+					$from = date_create($_GET['from']);
+					$from = date_format($from,"Y-m-d");
+					$to = date_create($_GET['to']);
+					$to = date_format($to,"Y-m-d");
+          
+          $diff_date=date_diff(date_create($from),date_create($to));
+         
+          
+          
+					$data['profit'] = $dashModel->getTotalSalesFromDateToDate($from,$to);
+          $theFinalStatement = []; $salesGraph = []; $collectionGraph = [];
+          while($row = $data['profit']->fetch_assoc()){
+            $row['onDate'] = (float)$dashModel->getCollenctionOnDate($row['invoiceDate'])->fetch_assoc()['onDateCollection'];
+            $row['otherDate'] = (float)$dashModel->getCollectionOtherDate($row['invoiceDate'])->fetch_assoc()['otherDateCollection'];
+            $row['totalCollection'] = $row['onDate'] + $row['otherDate'];
+            $row['dueOnDate'] = $row['TotalSales']-$row['onDate'];
+            
+            $row['cogs'] = $dashModel->getCostOfGoodsSold($row['invoiceDate'])->fetch_assoc()['COGS']; 
+            $row['profit'] = $row['sales'] - $row['cogs'];
+            /*$collectionArray = [
+              'onDate' => $onDateCollection,
+              'otherDate' => $otherDateCollection
+            ];
+            array_push($row, 'onDate' => $onDateCollection, 'otherDate' => $otherDateCollection);*/
+            array_push($salesGraph, [ 'label' => $row['invoiceDate'], 'y' => $row['sales'] ] );
+            array_push($collectionGraph, [ 'label' => $row['invoiceDate'], 'y' => $row['onDate'] ] );
+            
+            
+            
+            
+            array_push($theFinalStatement, $row);
+          }
+          
+          for($i = 0; $i<=$diff_date->days; $i++){
+            $consecutiveDate = date('Y-m-d',strtotime($from."+ ".$i." days"));
+            //echo $consecutiveDate;
+            $chk = true;
+            for($j = 0; $j<count($theFinalStatement); $j++){
+              $chk = true;
+              //echo "### ".$consecutiveDate." ".$theFinalStatement[$j]['invoiceDate']." ###<br>";
+              if($consecutiveDate==$theFinalStatement[$j]['invoiceDate']){
+                $chk = false;
+                break;
+              }
+            }
+            if($chk){
+              $offDayCollection = $dashModel->getCollectionOtherDate($consecutiveDate)->fetch_assoc()['otherDateCollection'];
+              if($offDayCollection!=0){
+                //echo $consecutiveDate." = ".$offDayCollection." <br>";
+                $offDayArray = [
+                  'invoiceDate' => $consecutiveDate,
+                  'salesNumber' => 0,
+                  'sales' => 0,
+                  'discount' => 0,
+                  'TotalSales' => 0,
+                  'onDate' => 0,
+                  'otherDate' => $offDayCollection,
+                  'totalCollection' => $offDayCollection,
+                  'dueOnDate' => 0,
+                  'cogs' => 0,
+                  'profit' => 0
+                  ];
+                  array_push($theFinalStatement,$offDayArray);
+              }
+              
+            }
+            
+          }
+          
+          
+          
+          $data['finalStatement'] = $theFinalStatement;
+          
+
+          
+          $data['salesGraph'] = $salesGraph;
+          $data['collectionGraph'] = $collectionGraph;
+          //pre_print($theFinalStatement);
+					//$data['expense'] = $dashModel->getExpenseIncomeStatement($from, $to);
+				}
+        $this->load->view('admin/ledger2', $data);
+      }
+      
+      if($reqData[0]=='collection'){
+        				$data = array(
+				'title'=> 'Collection Report'
+				);
+        $dashModel->setActivity( "Admin Collection Report");
+				$data['css'] = array('css/jquery-ui.css');
+				$data['js'] = array('js/jquery-ui.js','js/page/adminProfit.js');
+        $data['userList'] = $dashModel->getUserListForCollectionReport($_SESSION['data']['businessID']);
+        //pre_print($data['userList']);
+        if(isset($_GET['from'])){
+					$from = date_create($_GET['from']);
+					$from = date_format($from,"Y-m-d");
+					$to = date_create($_GET['to']);
+					$to = date_format($to,"Y-m-d");
+          $user = $_GET['userID'];
+					$data['trx'] = $dashModel->getTrxByUserDateToDate($user, $from, $to);
+          $data['from'] = $from;
+          $data['to'] = $to;
+          $data['userName'] = $dashModel->getUserFullName($user)->fetch_assoc()['name'];
+				}
+        
+        $this->load->view('admin/individualCollection', $data);
+      }
 		}
 	}
-	
+	public function asifmalik(){
+    for($i=0;$i<5;$i++) {
+ echo date('d-m-Y', strtotime("+" . $i . " day"))."<br>";
+}
+    
+  }
 	public function attandance(){
 		$this->sessionVerify('verify');
 		$this->load->model('adminModel');
@@ -3693,7 +3924,7 @@ class admin extends Controller
 				if($reqData[0]=='new')
 				{
 					$data = array(
-						'title'=> 'Add New Employee | Retail Manager'
+						'title'=> 'Add New Employee | আমার Manager'
 					);
 					$data['js'] = array('js/page/adminEmployee.js');
 

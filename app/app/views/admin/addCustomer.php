@@ -96,6 +96,29 @@
                                     <input type="text" id="newCustomerLimit" class="form-control">
                                 </div>
                            </div>
+                         
+                         
+                         <div class="form-group">
+                                <label>Previous Due</label>
+                                <div class="input-group">
+                                    <b class="input-group-addon">
+                                        <i class="glyphicon glyphicon-tags"></i>
+                                    </b>
+                                    <input type="text" id="newCustomerDue" class="form-control">
+                                </div>
+                           </div>
+                         
+                         <div class="form-group">
+                                <label>Repeat Previous Due</label>
+                                <div class="input-group">
+                                    <b class="input-group-addon">
+                                        <i class="glyphicon glyphicon-tags"></i>
+                                    </b>
+                                    <input type="text" id="newCustomerDue2" class="form-control">
+                                </div>
+                           </div>
+                         
+                         
                            <button class="btn btn-lg btn-primary pull-right" type="button" onclick="addCustomer()"><span class="glyphicon glyphicon-plus"></span> Add New Customer</button>
                        </form>
                     </div>

@@ -1,4 +1,4 @@
-var baseURL = "http://50.116.58.130:200/";
+var baseURL = "https://app.amar-manager.com/";
 
 //Add Category Function
 function addExpenseCategory() 

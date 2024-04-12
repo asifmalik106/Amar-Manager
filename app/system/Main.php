@@ -5,4 +5,15 @@ include 'system/sms.php';
 /*
  * Base URL
  */
-define("BASE_URL", "http://50.116.58.130:200/");
+define("BASE_URL", "https://app.amar-manager.com/");
+function pre_print($str){
+  echo "<pre>";
+  print_r($str);
+  echo "</pre>";
+}
+
+function var_print($str){
+  echo "<pre>";
+  var_dump($str);
+  echo "</pre>";
+}

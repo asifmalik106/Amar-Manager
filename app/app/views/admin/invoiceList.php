@@ -3,6 +3,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
+                <?php include 'system/notification.php'; ?>
               <h2 class="page-header">
                 <?php 
                   if($data['data']['type']=='Sale'){

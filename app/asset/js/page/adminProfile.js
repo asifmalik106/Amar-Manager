@@ -1,4 +1,4 @@
-var baseURL = "http://50.116.58.130:200/";
+var baseURL = "https://app.amar-manager.com/";
 
 $('#invoiceList').dataTable({
 "order": [[ 0, "desc" ]],
@@ -166,6 +166,7 @@ function loadAllTransactions(){
 function addCashToInvoice()
 {
 	$("#catStatusLoading").show();
+  $("#addCashToInvoice").prop("disabled",true);
 	var scID    = $('#scID').val();
 	var invID   = $('#payInvoiceID').html();
 	var payment = $('#payInvoicePayment').val();
@@ -183,6 +184,7 @@ function addCashToInvoice()
 	        $("#catStatusLoading").hide();
 	        if(data=="true"){
 	        	$("#catStatusTrue").fadeIn();
+            $("#addCashToInvoice").prop("disabled",false);
 	        	setTimeout(function(){ 
 	        		$("#catStatusTrue").fadeOut(); 
 	        	}, 3000);
@@ -203,12 +205,14 @@ function addCashToInvoice()
 	        	setTimeout(function(){ 
 	        		$("#catStatusEmpty").fadeOut(); 
 	        	}, 3000);
+            $("#addCashToInvoice").prop("disabled",false);
 	        }
 	        else{
 	        	$("#catStatusFalse").fadeIn();
 	        	setTimeout(function(){ 
 	        		$("#catStatusFalse").fadeOut(); 
 	        	}, 3000);
+            $("#addCashToInvoice").prop("disabled",false);
 	        }
 	    });
 }

@@ -3,6 +3,7 @@
     <div id="page-wrapper">
         <div class="row">
             <div class="col-lg-12">
+                <?php include 'system/notification.php'; ?>
                 <h2 class="page-header"><?php echo $adminSale['saleEntry']; ?></h2>
             </div>
             <!-- /.col-lg-12 -->
@@ -23,7 +24,7 @@
                         ?>
                         </select>
                     </div>
-
+<p>Date: <input type="text" name="date" id="datepicker" required="1" value="<?php echo date('Y-m-d'); ?>" readonly> Today is: <?php date_default_timezone_set($_SESSION['data']['businessTimeZone']); echo "<b>".date('Y-m-d')."</b> Now: <b>".date('h:m:s A')."</b>"; ?></p>
                     <table class="table table-bordered table-condensed" id="productForSale">
                         <thead>
                             <tr>
@@ -31,7 +32,6 @@
                                 <th><?php echo $adminSale['productName']; ?></th>
                                 <th><?php echo $adminSale['batch']; ?></th>
                                 <th><?php echo $adminSale['category']; ?></th>
-                                <th><?php echo $adminSale['purchaseRate']; ?></th>
                                 <th><?php echo $adminSale['retailRate']; ?></th>
                                 <th><?php echo $adminSale['stockQuantity']; ?></th>
                                 <th><?php echo $adminSale['limit']; ?></th>
@@ -45,7 +45,6 @@
                                     echo "<td class='pName'>".$product['productName']."</td>";
                                     echo "<td class='pBatch'>".$product['batch']."</td>";
                                     echo "<td class='pCategory'>".$product['categoryName']." (".$product['categoryUnit'].")"."</td>";
-                                    echo "<td class='pPurchase'>".$product['purchaseUnit']."</td>";
                                     echo "<td class='pSale'>".$product['saleUnit']."</td>";
                                     echo "<td class='pQuantity'>".$product['quantity']."</td>";
                                     echo "<td class='pLimit'><p style='display:none'>".$product['barcode']."</p>".$product['productLimit']."</td>";

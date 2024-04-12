@@ -26,13 +26,13 @@ class main extends Controller
 		}
 		else{
 			$data = array(
-				'title'=> 'Login | Retail Manager',
-				'js'=>'dsaasdas'
+				'title'=> 'Login | আমার Manager',
+				'css'=> array('css/bootstrap5.1.3.min.css')
 			);
 			$data['js'] = array('js/page/login.js'
 							);
 			if(isset($msg)){
-				$data = array_merge($data, array('msg'=>'Invalid Login Information!!! Try Again...'));
+				$data = array_merge($data, array('msg'=>'Wrong Username or Password!'));
 			}
 			$this->load->view('login',$data);
 		}
@@ -58,6 +58,10 @@ class main extends Controller
 			$result = $dbModel->getDBAndTimezome($loginData['businessID']);
 			$loginData = array_merge($loginData,$result->fetch_assoc());
 			Session::setSession($loginData);
+      
+      
+      $dbModel->setActivity($loginData['name'], "Login");
+      
 			$this->load->redirectIn();
 		}
 		else{
