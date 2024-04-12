@@ -1,8 +1,13 @@
 <?php
+
+/*
+ * Database Credentials here
+ *
+ */
 	define('DB_HOST', 'localhost');
-	define('DB_NAME', 'amarmana_MAIN_DB');
-	define('DB_USER', 'amarmana_MAIN_DB');
-	define('DB_PASS', 'q#GD6$%hR6Zx@!&$shLq9R');
+	define('DB_NAME', '');
+	define('DB_USER', '');
+	define('DB_PASS', '');
 /**
 * 
 */
