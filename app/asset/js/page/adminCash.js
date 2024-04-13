@@ -1,4 +1,4 @@
-var baseURL = "https://app.amar-manager.com/";
+var baseURL = "https://demo.amar-manager.com/";
 
 //Add Category Function
 function addCashAccount() {

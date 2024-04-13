@@ -1,4 +1,4 @@
-var baseURL = "https://app.amar-manager.com/";
+var baseURL = "https://demo.amar-manager.com/";
 $( "#datepicker" ).datepicker({ minDate: -1, maxDate: "+1D" });
 $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
 $('#invoiceList').dataTable({

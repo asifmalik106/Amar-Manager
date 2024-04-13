@@ -1,4 +1,4 @@
-var baseURL = "https://app.amar-manager.com/";
+var baseURL = "https://demo.amar-manager.com/";
 
 $('#invoiceList').dataTable({
 "order": [[ 0, "desc" ]],
