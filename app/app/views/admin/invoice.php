@@ -107,29 +107,7 @@
                             ?> 
                         </td>
                     </tr>
-                    <tr>
-                        <td> <strong>Payment: </strong> </td>
-                        <td class="invoice-amount">  
-                            <?php 
-                                $payment = $data['data']['paid']->fetch_assoc();
-                                echo $_SESSION['data']['businessCurrency']." ".number_format($payment['paid'], 2,'.','');
-                                $due = 0.0; $adv = 0.0;
-                                if($grandTotal>$payment['paid']){
-                                    $due = $grandTotal - $payment['paid'];
-                                }else{
-                                    $adv = $payment['paid'] - $grandTotal;
-                                }
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td> <strong>Due: </strong> </td>
-                        <td class="invoice-amount">  <?php echo $_SESSION['data']['businessCurrency']." ".number_format($due, 2,'.',''); ?></td>
-                    </tr>
-                    <tr>
-                        <td> <strong>Advance: </strong> </td>
-                        <td class="invoice-amount">   <?php echo $_SESSION['data']['businessCurrency']." ".number_format($adv, 2,'.',''); ?></td>
-                    </tr>
+
 
                 </table>
               </div>

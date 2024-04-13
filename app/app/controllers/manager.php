@@ -259,9 +259,9 @@ class manager extends Controller
         echo "<th> Invoice Date </th>";
         echo "<th> Invoice Time </th>";
         echo "<th> Invoice Total </th>";
-        echo "<th> Paid Total  </th>";
+        // echo "<th> Paid Total  </th>";
         echo "<th> Stuff Name </th>";
-        echo "<th> Status </th>";
+        // echo "<th> Status </th>";
         echo "<th> View </th>";
         echo "</tr>";
         echo "</thead>";
@@ -273,25 +273,26 @@ class manager extends Controller
 									$payNow = "payNow(".$invRow['invoiceID'].",'".$invoiceDate."','".$invoiceTime."','".$invRow['invoiceAmount']."','".$invRow['invoicePaid']."')";
                   $invStatus = 'class="btn btn-xs btn-danger" data-toggle="modal" data-target="#payNow"> <i class="glyphicon glyphicon-warning-sign"> </i> Pay Now </button>';
                   $invStatus = '<button onclick="'.$payNow.'" '.$invStatus;
-									if($invRow['invoicePaid'] == 0 && $invRow['invoiceAmount'] > 0)
-                  {
-                    echo "<tr class=\"ebmDanger\">";
-                  }
-                  else if($invRow['invoicePaid'] > 0 && $invRow['invoicePaid'] < $invRow['invoiceAmount'] && $invRow['invoiceAmount'] > 0 )
-                  {
-                    echo "<tr class=\"ebmWarning\">";
-                  }
-                  else
-                  {
-                    echo "<tr class=\"ebmSuccess\">";
-                    $invStatus = '<span class="label label-success"> <i class="glyphicon glyphicon-ok"> </i> Paid </span>';
-                  }
+                  echo "<tr>";
+//                  if($invRow['invoicePaid'] == 0 && $invRow['invoiceAmount'] > 0)
+//                  {
+//                    echo "<tr class=\"ebmDanger\">";
+//                  }
+//                  else if($invRow['invoicePaid'] > 0 && $invRow['invoicePaid'] < $invRow['invoiceAmount'] && $invRow['invoiceAmount'] > 0 )
+//                  {
+//                    echo "<tr class=\"ebmWarning\">";
+//                  }
+//                  else
+//                  {
+//                    echo "<tr class=\"ebmSuccess\">";
+//                    $invStatus = '<span class="label label-success"> <i class="glyphicon glyphicon-ok"> </i> Paid </span>';
+//                  }
 									
                   echo "<td class=\"invoiceID\">".$invRow['invoiceID']."</td>";
                   echo "<td class=\"invoiceDate\">".date("d/m/Y", strtotime($invRow['invoiceDate']))."</td>";
                   echo "<td class=\"invoiceTime\">".date("h:i:s A", strtotime($invRow['invoiceTime']))."</td>";
                   echo "<td class=\"invoiceAmount\">".$invRow['invoiceAmount']."</td>";
-                  echo "<td class=\"invoicePaid\">".$invRow['invoicePaid']."</td>";
+                  // echo "<td class=\"invoicePaid\">".$invRow['invoicePaid']."</td>";
                   echo "<td>".$invRow['invoiceAgentName']."</td>";
                   if($invRow['invoicePaid'] == 0 && $invRow['invoiceAmount'] > 0)
                   {
@@ -300,9 +301,9 @@ class manager extends Controller
 									//echo '<td><button onclick="asif(4)" '.$invStatus;
                   //echo '<td><button onclick="payNow("'.$invRow['invoiceID'].'") '.$invStatus."</td>";
                   
-                  echo "<td>".$invStatus."</td>";
+                  // echo "<td>".$invStatus."</td>";
 									echo "<td><a class=\"btn btn-xs btn-primary\" href=\"".BASE_URL."manager/invoice/".$invRow['invoiceID']."\"> <i class=\"glyphicon glyphicon-eye-open\"></i> View </a></td>";
-                  echo "</tr>";
+                  echo "</tr> ";
                 }
               
             echo "</tbody>";
@@ -1427,39 +1428,42 @@ class manager extends Controller
                             echo '<td><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">'.$_SESSION['data']['businessCurrency']." ".number_format($grandTotal, 2,'.','').'</p></td>';
                         echo '</tr>';
                         $payment = $data['data']['paid']->fetch_assoc();
-                        echo '<tr class="invoice-lg">';
-                            echo '<td colspan="4"><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">Paid</p></td>';
-                            echo '<td><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">'.$_SESSION['data']['businessCurrency']." ".number_format($payment['paid'], 2,'.','').'</p></td>';
-                        echo '</tr>';
+//                        echo '<tr class="invoice-lg">';
+//                            echo '<td colspan="4"><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">Paid</p></td>';
+//                            echo '<td><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">'.$_SESSION['data']['businessCurrency']." ".number_format($payment['paid'], 2,'.','').'</p></td>';
+//                        echo '</tr>';
             $due = 0.0;
                                 if($grandTotal>$payment['paid']){
                                     $due = $grandTotal - $payment['paid'];
                                 }
-                        echo '<tr class="invoice-lg">';
-                            echo '<td colspan="4"><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">Due</p></td>';
-                            echo '<td><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">'.$_SESSION['data']['businessCurrency']." ".number_format($due, 2,'.','').'</p></td>';
-                        echo '</tr>';
+//                        echo '<tr class="invoice-lg">';
+//                            echo '<td colspan="4"><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">Due</p></td>';
+//                            echo '<td><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">'.$_SESSION['data']['businessCurrency']." ".number_format($due, 2,'.','').'</p></td>';
+//                        echo '</tr>';
             				$invT = $dashModel->getTotalInvoiceSC($data['data']['info']['scID'])->fetch_assoc()['invoiceTotal'];
 				$paidT = $dashModel->getTotalPaidSC($data['data']['info']['scID'])->fetch_assoc()['paidTotal'];
 				$b = $paidT - $invT;
             
             $previousDue = 0;
             $totalDue = 0;
+            $advanceOrDueText = "";
 				if($b<0 && $b!=$due)
 				{
-          $b = $b*(-1);
-          $previousDue = $b - $due;
-          
-        }
+                    $b = $b*(-1);
+                    $previousDue = $b - $due;
+                    $advanceOrDueText = "Previous Due ";
+                }else{
+                    $advanceOrDueText = "Previous Advance ";
+                }
             $totalDue = $previousDue + $due;
                         echo '<tr class="invoice-lg">';
-                            echo '<td colspan="4"><p style="font-family: Roboto, sans-serif; margin:0; font-size: 12px; font-weight: 400" align="right">Previous Due</p></td>';
-                            echo '<td><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">'.$_SESSION['data']['businessCurrency']." ".number_format($previousDue, 2,'.','').'</p></td>';
+                            echo '<td colspan="4"><p style="font-family: Roboto, sans-serif; margin:0; font-size: 16px; font-weight: 600" align="right">'.$advanceOrDueText.'</p></td>';
+                            echo '<td><p style="font-family: Roboto, sans-serif; margin:0; font-size: 16px; font-weight: 600" align="right">'.$_SESSION['data']['businessCurrency']." ".number_format($b, 2,'.','').'</p></td>';
                         echo '</tr>';
-                        echo '<tr class="invoice-lg">';
-                            echo '<td colspan="4"><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">Total Due</p></td>';
-                            echo '<td><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 700" align="right">'.$_SESSION['data']['businessCurrency']." ".number_format($totalDue, 2,'.','').'</p></td>';
-                        echo '</tr>';
+//                        echo '<tr class="invoice-lg">';
+//                            echo '<td colspan="4"><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 400" align="right">Total Due</p></td>';
+//                            echo '<td><p style="font-family: Roboto, sans-serif; margin:0; font-size: 14px; font-weight: 700" align="right">'.$_SESSION['data']['businessCurrency']." ".number_format($totalDue, 2,'.','').'</p></td>';
+//                        echo '</tr>';
                     echo '</tbody>';
                 echo '</table>';
             date_default_timezone_set($_SESSION['data']['businessTimeZone']);

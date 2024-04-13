@@ -1063,9 +1063,9 @@ class admin extends Controller
         echo "<th> Invoice Date </th>";
         echo "<th> Invoice Time </th>";
         echo "<th> Invoice Total </th>";
-        echo "<th> Paid Total  </th>";
+        // echo "<th> Paid Total  </th>";
         echo "<th> Stuff Name </th>";
-        echo "<th> Status </th>";
+        // echo "<th> Status </th>";
         echo "<th> View </th>";
         echo "</tr>";
         echo "</thead>";
@@ -1077,25 +1077,26 @@ class admin extends Controller
 									$payNow = "payNow(".$invRow['invoiceID'].",'".$invoiceDate."','".$invoiceTime."','".$invRow['invoiceAmount']."','".$invRow['invoicePaid']."')";
                   $invStatus = 'class="btn btn-xs btn-danger" data-toggle="modal" data-target="#payNow"> <i class="glyphicon glyphicon-warning-sign"> </i> Pay Now </button>';
                   $invStatus = '<button onclick="'.$payNow.'" '.$invStatus;
-									if($invRow['invoicePaid'] == 0 && $invRow['invoiceAmount'] > 0)
-                  {
-                    echo "<tr class=\"ebmDanger\">";
-                  }
-                  else if($invRow['invoicePaid'] > 0 && $invRow['invoicePaid'] < $invRow['invoiceAmount'] && $invRow['invoiceAmount'] > 0 )
-                  {
-                    echo "<tr class=\"ebmWarning\">";
-                  }
-                  else
-                  {
-                    echo "<tr class=\"ebmSuccess\">";
-                    $invStatus = '<span class="label label-success"> <i class="glyphicon glyphicon-ok"> </i> Paid </span>';
-                  }
-									
+                  echo "<tr>";
+//                    if($invRow['invoicePaid'] == 0 && $invRow['invoiceAmount'] > 0)
+//                  {
+//                    echo "<tr class=\"ebmDanger\">";
+//                  }
+//                  else if($invRow['invoicePaid'] > 0 && $invRow['invoicePaid'] < $invRow['invoiceAmount'] && $invRow['invoiceAmount'] > 0 )
+//                  {
+//                    echo "<tr class=\"ebmWarning\">";
+//                  }
+//                  else
+//                  {
+//                    echo "<tr class=\"ebmSuccess\">";
+//                    $invStatus = '<span class="label label-success"> <i class="glyphicon glyphicon-ok"> </i> Paid </span>';
+//                  }
+//
                   echo "<td class=\"invoiceID\">".$invRow['invoiceID']."</td>";
                   echo "<td class=\"invoiceDate\">".date("d/m/Y", strtotime($invRow['invoiceDate']))."</td>";
                   echo "<td class=\"invoiceTime\">".date("h:i:s A", strtotime($invRow['invoiceTime']))."</td>";
                   echo "<td class=\"invoiceAmount\">".$invRow['invoiceAmount']."</td>";
-                  echo "<td class=\"invoicePaid\">".$invRow['invoicePaid']."</td>";
+                  // echo "<td class=\"invoicePaid\">".$invRow['invoicePaid']."</td>";
                   echo "<td>".$invRow['invoiceAgentName']."</td>";
                   if($invRow['invoicePaid'] == 0 && $invRow['invoiceAmount'] > 0)
                   {
@@ -1104,7 +1105,7 @@ class admin extends Controller
 									//echo '<td><button onclick="asif(4)" '.$invStatus;
                   //echo '<td><button onclick="payNow("'.$invRow['invoiceID'].'") '.$invStatus."</td>";
                   
-                  echo "<td>".$invStatus."</td>";
+                  //  echo "<td>".$invStatus."</td>";
 									echo "<td><a class=\"btn btn-xs btn-primary\" href=\"".BASE_URL."admin/invoice/".$invRow['invoiceID']."\"> <i class=\"glyphicon glyphicon-eye-open\"></i> View </a></td>";
                   echo "</tr>";
                 }
