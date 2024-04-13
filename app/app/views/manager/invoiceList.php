@@ -48,7 +48,7 @@
                            $amt = (float)($row['invoiceAmount']-$row['invoiceDiscount']);
                             echo "<tr>\n";
                             echo "<td><a href=\"".BASE_URL."manager/invoice/".$row['invoiceID']."\">".$row['invoiceID']."</a></td>\n";
-                            echo "<td>".$row['scNameCompany']." ".$row['scID']."<p style='display: none'>".$row['scContactNo']."'</p></td>\n";
+                            echo "<td>".$row['scNameCompany']."<p style='display: none'>".$row['scContactNo']."'</p></td>\n";
                             echo "<td>".date("d/m/Y", strtotime($row['invoiceDate']))."</td>\n";
                             echo "<td>".$row['invoiceTime']."</td>\n";
                             echo "<td>৳".$amt."</td>\n";

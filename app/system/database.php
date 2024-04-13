@@ -5,9 +5,9 @@
  *
  */
 	define('DB_HOST', 'localhost');
-	define('DB_NAME', '');
-	define('DB_USER', '');
-	define('DB_PASS', '');
+	define('DB_NAME', 'amarmana_MAIN_demo');
+	define('DB_USER', 'amarmana_demo');
+	define('DB_PASS', 'asifsadiq106');
 /**
 * 
 */
